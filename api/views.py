@@ -8,7 +8,7 @@ def hello_world(request):
     return Response({"message": "Hello from Django!"})
 
 
-@api_view(['GET', 'POST'])  # ✅ Allow both GET & POST
+@api_view(['GET', 'POST'])  #  Allow both GET & POST
 def add_spot(request):
     if request.method == "POST":
         data = request.data
