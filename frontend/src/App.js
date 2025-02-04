@@ -18,11 +18,14 @@ function App() {
   );
   */
 
+
+  // Start of Add Spot Component //
   const handleFormSubmit = (data) => {
     console.log("Submitting:", data);
-    axios.post("http://127.0.0.1:8000/api/spots/", data)
-      .then(response => console.log("Spot added:", response.data))
-      .catch(error => console.error("Error adding spot:", error));
+    axios.post("http://127.0.0.1:8000/api/spots/", data)  // ✅ Ensure it's a POST request
+  .then(response => console.log("Spot added:", response.data))
+  .catch(error => console.error("Error adding spot:", error));
+
   };
 
   return (
@@ -30,6 +33,7 @@ function App() {
       <AddSpotForm onSubmit={handleFormSubmit} />
     </div>
   );
+  // End of Add Spot Component //
 }
 
 export default App;
