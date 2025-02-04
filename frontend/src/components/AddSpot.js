@@ -7,6 +7,7 @@ function AddSpotForm({ onSubmit }) {
   const [toTime, setToTime] = useState("");
   const [toAmPm, setToAmPm] = useState("AM");
   const [campusSide, setCampusSide] = useState("N/A");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
@@ -23,6 +24,7 @@ function AddSpotForm({ onSubmit }) {
       fromTime: `${fromTime} ${fromAmPm}`,
       toTime: `${toTime} ${toAmPm}`,
       campusSide,
+      description,
     };
 
     onSubmit(formData); // Function to send data to backend
@@ -93,6 +95,17 @@ function AddSpotForm({ onSubmit }) {
         <option>Central</option>
         <option>N/A</option>
       </select>
+
+      <p></p>
+      {/* Spot Description */}
+      <input
+        type="text"
+        placeholder="Spot Description and Details"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="border p-2 w-full rounded"
+        required
+      />
 
       {/* Error Message */}
       {error && <p className="text-red-500 text-sm">{error}</p>}
