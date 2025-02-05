@@ -11,5 +11,5 @@ urlpatterns = [
     path('spots/', get_all_spots, name='get_all_spots'),  # This should have 'api/' as well
     path('spots/add/', add_spot, name='add_spot'),  # Add a dedicated route for adding spots
     path('spots/search/', search_spots, name='search_spots'),  # This is correct for searching spots
-    path('api/spots/<int:id>/', spot_detail, name ='spot-detail'), 
+    path('spots/<int:id>/', spot_detail, name='spot-detail'),
 ]
