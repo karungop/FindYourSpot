@@ -67,3 +67,21 @@ def search_spots(request):
     spots = Spot.objects.filter(**filters)
     serializer = SpotSerializer(spots, many=True)
     return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+def spot_detail(request, id):
+    try:
+        spot = Spot.objects.get(id=id)
+    except Spot.DoesNotExist:
+        return Response({"error": "Spot not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SpotSerializer(spot)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = SpotSerializer(spot, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
