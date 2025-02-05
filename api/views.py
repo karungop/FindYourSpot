@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Spot
 from .serializers import SpotSerializer
+from datetime import time
 
 @api_view(['GET'])
 def hello_world(request):
@@ -43,4 +44,26 @@ def get_all_spots(request):
     serializer = SpotSerializer(spots, many=True)
     #print(spots)
     return Response(serializer.data)
-        
+
+
+@api_view(['GET'])
+def search_spots(request):
+    campus_side = request.query_params.get('campus_side')
+    search_time = request.query_params.get('time')
+
+    filters = {}
+
+    if search_time:
+        try:
+            search_time_obj = time.fromisoformat(search_time)
+            filters['time_available_from__lte'] = search_time_obj
+            filters['time_available_till__gte'] = search_time_obj
+        except ValueError:
+            return Response({"error": "Invalid time format. Use HH:MM."}, status=400)
+
+    if campus_side and campus_side != "N/A":
+        filters['campus_side'] = campus_side
+
+    spots = Spot.objects.filter(**filters)
+    serializer = SpotSerializer(spots, many=True)
+    return Response(serializer.data)
