@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddSpotForm from "./components/AddSpot.js";
-import SearchSpotForm from "./components/SearchSpotForm.js"
+import SearchSpotForm from "./components/SearchSpotForm.js";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import UpdateSpotForm from "./UpdateSpotForm";
 
 function App() {
   /*const [message, setMessage] = useState("");
@@ -54,14 +56,17 @@ function App() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <SearchSpotForm onSearch={handleSearch} />
-
-
-    
-
-      <AddSpotForm onSubmit={handleFormSubmit} />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={
+          <div className="flex justify-center items-center min-h-screen">
+            <SearchSpotForm onSearch={handleSearch} />
+            <AddSpotForm onSubmit={handleFormSubmit} />
+          </div>
+         }/>
+        <Route path="/update-spot/:id" element={<UpdateSpotForm />} />
+      </Routes>
+    </Router>
   );
   // End of Add Spot Component //
 }
