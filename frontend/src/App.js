@@ -20,12 +20,15 @@ function App() {
 
 
   // Start of Add Spot Component //
-  const handleFormSubmit = (data) => {
-    console.log("Submitting:", data);
-    axios.post("http://127.0.0.1:8000/api/spots/", data)  // ✅ Ensure it's a POST request
-  .then(response => console.log("Spot added:", response.data))
-  .catch(error => console.error("Error adding spot:", error));
-
+  const handleFormSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/spots/", data);
+      console.log("Spot added:", response.data);
+      alert("Spot successfully added!");
+    } catch (error) {
+      console.log("Error adding spot:", error.response?.data || error.message);
+      alert("Failed to add spot. Please check your input.");
+    }
   };
 
   return (
