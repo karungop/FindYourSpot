@@ -19,9 +19,22 @@ function App() {
   );
   */
 
-  const handleSearch = (searchData) => {
-    console.log("Searching with:", searchData);
-    // Here you can make an API request with the search data
+  const handleSearch = async (searchData) => {
+    try {
+      const response = await fetch(
+        `/api/spots/search/?campus_side=${searchData.campus_side}&time=${searchData.time}`
+      );
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Spots found:", data);
+      } else {
+        console.error("Error:", data.error);
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("Failed to fetch spots. Please try again.");
+    }
   };
 
 
