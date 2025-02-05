@@ -35,4 +35,12 @@ def create_spot(request):
     else:
         print("Validation errors:", serializer.errors)  # Print validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view (['GET'])
+def get_all_spots(request):
+    spots = Spot.objects.all()
+    serializer = SpotSerializer(spots, many=True)
+    #print(spots)
+    return Response(serializer.data)
         

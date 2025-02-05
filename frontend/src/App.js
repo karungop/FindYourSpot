@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddSpotForm from "./components/AddSpot.js";
+import SearchSpotForm from "./components/SearchSpotForm.js"
 
 function App() {
   /*const [message, setMessage] = useState("");
@@ -18,6 +19,14 @@ function App() {
   );
   */
 
+  const handleSearch = (searchData) => {
+    console.log("Searching with:", searchData);
+    // Here you can make an API request with the search data
+  };
+
+
+
+
 
   // Start of Add Spot Component //
   const handleFormSubmit = async (data) => {
@@ -33,6 +42,11 @@ function App() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <SearchSpotForm onSearch={handleSearch} />
+
+
+    
+
       <AddSpotForm onSubmit={handleFormSubmit} />
     </div>
   );
