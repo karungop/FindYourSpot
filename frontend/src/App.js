@@ -3,8 +3,8 @@ import axios from "axios";
 import AddSpotForm from "./components/AddSpot.js";
 import SearchSpotForm from "./components/SearchSpotForm.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import UpdateSpotForm from "./UpdateSpotForm";
-import DeleteSpotForm from "./DeleteSpotForm";
+import UpdateSpotForm from "./components/UpdateSpotForm";
+import DeleteSpotForm from "./components/DeleteSpotForm";
 
 
 function App() {

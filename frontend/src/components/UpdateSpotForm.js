@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";  // Assuming React Router is used
+import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateSpotForm() {
   const { id } = useParams();  // Get the spot ID from the URL
@@ -11,9 +11,10 @@ function UpdateSpotForm() {
   const [toTime, setToTime] = useState("");
   const [campusSide, setCampusSide] = useState("N/A");
   const [description, setDescription] = useState("");
+  const [lastUpdated, setLastUpdated] = useState("");  // New state for last updated
   const [error, setError] = useState("");
 
-  // Fetch existing spot data when component mounts
+  // Fetch existing spot data when the component mounts
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/spots/${id}/`)
@@ -24,6 +25,7 @@ function UpdateSpotForm() {
         setToTime(data.time_available_till);
         setCampusSide(data.campus_side);
         setDescription(data.description);
+        setLastUpdated(data.last_updated);  // Set the last updated time
       })
       .catch((error) => {
         console.error("Error fetching spot data:", error);
@@ -40,12 +42,13 @@ function UpdateSpotForm() {
       campus_side: campusSide,
       description: description,
     };
-
+    
     axios
       .put(`http://127.0.0.1:8000/api/spots/${id}/`, updatedData)
       .then(() => {
+        //alert("Last Updated:", data.lastupdated);
         alert("Spot updated successfully!");
-        navigate("/");  // Redirect to the main page after update
+        navigate("/");  // Redirect to the main page after the update
       })
       .catch((error) => {
         console.error("Error updating spot:", error);
@@ -108,6 +111,16 @@ function UpdateSpotForm() {
         className="border p-2 w-full rounded"
         rows="3"
       />
+
+      {lastUpdated ? (
+        <div className="space-y-2">
+
+          <p><strong>Last Updated:</strong> {new Date(lastUpdated).toLocaleString("en-US", { timeZone: "EST" })}</p>
+          
+        </div>
+      ) : (
+        <p>Loading spot details...</p>
+      )}
 
       <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600">
         Update Spot
