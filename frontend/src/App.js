@@ -4,6 +4,8 @@ import AddSpotForm from "./components/AddSpot.js";
 import SearchSpotForm from "./components/SearchSpotForm.js";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import UpdateSpotForm from "./UpdateSpotForm";
+import DeleteSpotForm from "./DeleteSpotForm";
+
 
 function App() {
   /*const [message, setMessage] = useState("");
@@ -46,7 +48,7 @@ function App() {
   // Start of Add Spot Component //
   const handleFormSubmit = async (data) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/spots/", data);
+      const response = await axios.post("http://127.0.0.1:8000/api/spots/add/", data);
       console.log("Spot added:", response.data);
       alert("Spot successfully added!");
     } catch (error) {
@@ -65,6 +67,7 @@ function App() {
           </div>
          }/>
         <Route path="/update-spot/:id" element={<UpdateSpotForm />} />
+        <Route path="/delete-spot/:id" element={<DeleteSpotForm />} />
       </Routes>
     </Router>
   );

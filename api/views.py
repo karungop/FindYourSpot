@@ -68,7 +68,7 @@ def search_spots(request):
     serializer = SpotSerializer(spots, many=True)
     return Response(serializer.data)
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def spot_detail(request, id):
     try:
         spot = Spot.objects.get(id=id)
@@ -85,3 +85,6 @@ def spot_detail(request, id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        spot.delete()
+        return Response({"message": "Spot deleted successfully"}, status=status.HTTP_204_NO_CONTENT)

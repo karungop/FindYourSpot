@@ -48,6 +48,10 @@ function SearchSpotForm({ onSearch }) {
     navigate(`/update-spot/${spotId}`);  // Navigate to the update page with spot ID
   };
 
+  const handleDelete = (spotId) => {
+    navigate(`/delete-spot/${spotId}`);  // Navigate to the delete page with spot ID
+  };
+
   return (
     <div className="p-4 border rounded shadow-md space-y-4 w-80">
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -98,7 +102,14 @@ function SearchSpotForm({ onSearch }) {
                 >
                   Update Spot
                 </button>
-                <p>Delete Spot</p>
+
+                
+                <button
+                  onClick={() => handleDelete(spot.id)}
+                  className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                >
+                  Delete Spot
+                </button>
               </li>
             ))}
           </ul>
