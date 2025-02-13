@@ -31,7 +31,7 @@ function SearchSpotForm({ onSearch }) {
   };
 
   return (
-    <div className="search-spot-form text-align: center" >
+    <div className="search-spot-form " >
   <h2>Find Your Spot</h2>
 
   <form onSubmit={handleSubmit} className="space-y-3">

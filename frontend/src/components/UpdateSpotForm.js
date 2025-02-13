@@ -3,18 +3,18 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateSpotForm() {
-  const { id } = useParams();  // Get the spot ID from the URL
-  const navigate = useNavigate();  // To navigate back after update
-
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
   const [buildingName, setBuildingName] = useState("");
   const [fromTime, setFromTime] = useState("");
   const [toTime, setToTime] = useState("");
   const [campusSide, setCampusSide] = useState("N/A");
   const [description, setDescription] = useState("");
-  const [lastUpdated, setLastUpdated] = useState("");  // New state for last updated
+  const [lastUpdated, setLastUpdated] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch existing spot data when the component mounts
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/spots/${id}/`)
@@ -25,11 +25,13 @@ function UpdateSpotForm() {
         setToTime(data.time_available_till);
         setCampusSide(data.campus_side);
         setDescription(data.description);
-        setLastUpdated(data.last_updated);  // Set the last updated time
+        setLastUpdated(data.last_updated);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching spot data:", error);
         setError("Failed to load spot data.");
+        setLoading(false);
       });
   }, [id]);
 
@@ -40,15 +42,14 @@ function UpdateSpotForm() {
       time_available_from: fromTime,
       time_available_till: toTime,
       campus_side: campusSide,
-      description: description,
+      description,
     };
-    
+
     axios
       .put(`http://127.0.0.1:8000/api/spots/${id}/`, updatedData)
       .then(() => {
-        //alert("Last Updated:", data.lastupdated);
         alert("Spot updated successfully!");
-        navigate("/");  // Redirect to the main page after the update
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error updating spot:", error);
@@ -56,39 +57,51 @@ function UpdateSpotForm() {
       });
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded shadow-md space-y-3 w-80">
-      <h2 className="text-lg font-semibold">Update Spot</h2>
+  const handleReset = () => {
+    setBuildingName(buildingName);
+    setFromTime(fromTime);
+    setToTime(toTime);
+    setCampusSide(campusSide);
+    setDescription(description);
+  };
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+  if (loading) {
+    return <p>Loading spot details...</p>;
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="update-spot-form">
+      <h2>Update Spot</h2>
+
+      {error && <p className="error">{error}</p>}
 
       <input
         type="text"
         placeholder="Building Name"
         value={buildingName}
         onChange={(e) => setBuildingName(e.target.value)}
-        className="border p-2 w-full rounded"
+        className="input-field"
         required
       />
 
-      <div className="flex space-x-2">
-        <label className="text-sm font-medium">From:</label>
+      <div className="form-group">
+        <label>From:</label>
         <input
           type="time"
           value={fromTime}
           onChange={(e) => setFromTime(e.target.value)}
-          className="border p-2 w-full rounded"
+          className="input-field"
           required
         />
       </div>
 
-      <div className="flex space-x-2">
-        <label className="text-sm font-medium">To:</label>
+      <div className="form-group">
+        <label>To:</label>
         <input
           type="time"
           value={toTime}
           onChange={(e) => setToTime(e.target.value)}
-          className="border p-2 w-full rounded"
+          className="input-field"
           required
         />
       </div>
@@ -96,7 +109,7 @@ function UpdateSpotForm() {
       <select
         value={campusSide}
         onChange={(e) => setCampusSide(e.target.value)}
-        className="border p-2 w-full rounded"
+        className="input-field"
       >
         <option value="North">North</option>
         <option value="South">South</option>
@@ -108,23 +121,16 @@ function UpdateSpotForm() {
         placeholder="Spot Description and Details"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="border p-2 w-full rounded"
+        className="input-field"
         rows="3"
       />
 
-      {lastUpdated ? (
-        <div className="space-y-2">
+      <p><strong>Last Updated:</strong> {new Date(lastUpdated).toLocaleString("en-US", { timeZone: "EST" })}</p>
 
-          <p><strong>Last Updated:</strong> {new Date(lastUpdated).toLocaleString("en-US", { timeZone: "EST" })}</p>
-          
-        </div>
-      ) : (
-        <p>Loading spot details...</p>
-      )}
-
-      <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600">
-        Update Spot
-      </button>
+      <div className="button-group">
+        <button type="submit" className="button update-button">Update Spot</button>
+        <button type="button" onClick={handleReset} className="button reset-button">Reset</button>
+      </div>
     </form>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import '../styles.css';
 
 function AddSpotForm({ onSubmit }) {
   const [buildingName, setBuildingName] = useState("");
@@ -11,9 +12,7 @@ function AddSpotForm({ onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateTime()) {
-      return;
-    }
+    if (!validateTime()) return;
 
     const formData = {
       building_name: buildingName,
@@ -25,7 +24,7 @@ function AddSpotForm({ onSubmit }) {
 
     onSubmit(formData);
     setError("");
-    resetForm();
+    resetForm();  // Reset form only if the submission succeeds
   };
 
   const validateTime = () => {
@@ -34,19 +33,8 @@ function AddSpotForm({ onSubmit }) {
       return hours * 60 + minutes;
     };
 
-    const isValidTime = (time) => {
-      const [hours, minutes] = time.split(":").map(Number);
-      return (
-        hours >= 0 &&
-        hours < 24 &&
-        minutes >= 0 &&
-        minutes < 60 &&
-        time.length === 5 // Ensure it's in "HH:MM" format
-      );
-    };
-
-    if (!isValidTime(fromTime) || !isValidTime(toTime)) {
-      setError("Invalid time entered. Please use a valid time in HH:MM format.");
+    if (!fromTime || !toTime) {
+      setError("Both time fields are required.");
       return false;
     }
 
@@ -70,16 +58,18 @@ function AddSpotForm({ onSubmit }) {
     <form onSubmit={handleSubmit} className="p-4 border rounded shadow-md space-y-3 w-80">
       <h2 className="text-lg font-semibold">Add Spot</h2>
 
-      <input
-        type="text"
-        placeholder="Building Name"
-        value={buildingName}
-        onChange={(e) => setBuildingName(e.target.value)}
-        className="border p-2 w-full rounded"
-        required
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Building Name"
+          value={buildingName}
+          onChange={(e) => setBuildingName(e.target.value)}
+          className="border p-2 w-full rounded"
+          required
+        />
+      </div>
 
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-1">
         <label className="block font-medium">Time Available From:</label>
         <input
           type="time"
@@ -90,7 +80,7 @@ function AddSpotForm({ onSubmit }) {
         />
       </div>
 
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-1">
         <label className="block font-medium">Time Available Till:</label>
         <input
           type="time"
@@ -101,20 +91,30 @@ function AddSpotForm({ onSubmit }) {
         />
       </div>
 
-      <select value={campusSide} onChange={(e) => setCampusSide(e.target.value)} className="border p-2 w-full rounded">
-        <option>North</option>
-        <option>South</option>
-        <option>Central</option>
-        <option>N/A</option>
-      </select>
+      <div>
+        <label className="block font-medium">Campus Side:</label>
+        <select
+          value={campusSide}
+          onChange={(e) => setCampusSide(e.target.value)}
+          className="border p-2 w-full rounded"
+        >
+          <option value="N/A">N/A</option>
+          <option value="North">North</option>
+          <option value="South">South</option>
+          <option value="Central">Central</option>
+        </select>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Spot Description and Details"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="border p-2 w-full rounded"
-      />
+      <div>
+        <label className="block font-medium">Spot Description:</label>
+        <textarea
+          placeholder="Spot Description and Details"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full rounded"
+          rows="3"
+        />
+      </div>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
